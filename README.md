@@ -15,7 +15,7 @@ The **clustlasso** package can be installed as any standard R package (as descri
 
 This will typically involve typing the following command from your GitLab workspace :  
 
-` install.package("clustlasso", type = "source", repos = NULL)`
+` install.packages("clustlasso", type = "source", repos = NULL)`
 
 Once the package is installed, it can be loaded using : 
 
