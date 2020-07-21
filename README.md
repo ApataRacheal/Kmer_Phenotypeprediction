@@ -12,8 +12,10 @@ While this paper focuses on the task of building predictive models of anti-micro
 
 ## Installation 
 The **clustlasso** package can be installed as any standard R package (as described for instance in the [R documentation](https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages)).
+
 This will typically involve typing the following command from your GitLab workspace :  
  ` install.package("clustlasso", type = "source", repos = NULL)`
+
 Once the package is installed, it can be loaded using : 
 `library(clustlasso)`
 
