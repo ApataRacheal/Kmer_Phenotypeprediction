@@ -1,4 +1,4 @@
-Package: clustLasso
+Package: clustlasso
 Title: A package implementing cluster-lasso approach.
 Version: 1.0
 Description: A package implementing cluster-lasso approach.

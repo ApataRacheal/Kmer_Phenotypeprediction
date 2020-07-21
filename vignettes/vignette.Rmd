@@ -1,5 +1,5 @@
 ---
-title: "ClustLasso Vignette"
+title: "clustlasso Vignette"
 output: html_document
 ---
 
@@ -9,25 +9,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-In this document, we illustrate the use of the clustLasso package. For this purpose, we run a classical process of cross-validation / model selection / test-set prediction using both a standard lasso and a cluster-lasso approach, and compare the results obtained.
+In this document, we illustrate the use of the clustlasso package. For this purpose, we run a classical process of cross-validation / model selection / test-set prediction using both a standard lasso and a cluster-lasso approach, and compare the results obtained.
 
 
-We first load the package, set the random seed and load a dataset taken from from [Eyre, 2017](https://www.ncbi.nlm.nih.gov/pubmed/28333355). This dataset is included in the package for illustration purposes. It contains the $k$-mer profiles of 664 *Neisseria gonorrhoeae* strains, stored in the matrix $X$, and a binary phenotype, stored in the vector $y$, encoding their susceptiblity or non-susceptiblity to the cefixime antibiotic. 
+We first load the package, set the random seed and load a dataset taken from from [Eyre, 2017](https://www.ncbi.nlm.nih.gov/pubmed/28333355). This dataset is included in the package for illustration purposes. It contains the $k$-mer profiles of 664 *Neisseria gonorrhoeae* strains, stored in the matrix $X$, and a binary phenotype, stored in the vector $y$, encoding their susceptibility or non-susceptibility to the cefixime antibiotic. 
 
 
 ```{r}
 # load package
-suppressMessages( library(clustLasso) )
+suppressWarnings( suppressMessages( library(clustlasso) ) )
 # specify / set random seed
 seed = 42
 set.seed(seed)
 # load example dataset
-input.file = system.file("data", "NG-dataset.Rdata", package = "clustLasso")
+input.file = system.file("data", "NG-dataset.Rdata", package = "clustlasso")
 load(input.file)
 ```
 
 We then split the dataset to into a training and a test dataset, respectively made of 80\% and 20\% of the entire dataset. Note that we consider that we have at our disposal a covariate defining sub-groups in our population, stored here in the $\texttt{pop_structure}$ column of the $\texttt{meta}$ data-frame that is part of the dataset. 
-For this example, the sub-groups simply correspond to the geographic origin of the samples, but in practice one could consider alternative strategies based on actual population structure covariates (e.g., sequence types - STs) to define more or less challenging settings (e.g., maintaining the STs prevalences or considering distinct STs between the training and test sets).
+For this example, the sub-groups simply correspond to the geographic origin of the samples, but in practice one could consider alternative strategies based on actual population structure covariates (e.g., sequence types - STs) to define more or less challenging settings (e.g., maintaining the STs prevalence or considering distinct STs between the training and test sets).
 
 ```{r}
 # pick 20% for test
@@ -56,7 +56,7 @@ We first run a standard lasso process, which includes :
 2. selecting the best model 
 3. making predictions on the test set and computing the predictive performance
 
-##1. Cross-validation process
+## 1. Cross-validation process
 
 We run a cross-validation process, using the **lasso_cv()** function included in the package. 
 The $\texttt{n.folds}$, $\texttt{n.repeat}$ and $\texttt{n.lambda}$ arguments respectively define the number of folds to consider, the number of times the cross-validation is to be repeated and the number of candidate values to consider for the lasso regularization parameter. 
@@ -79,7 +79,7 @@ par(mfcol = c(1,3))
 show_cv_overall(cv.res.lasso, modsel.criterion = "balanced.accuracy.best", best.eps = 1)
 ```
 
-##2. Selecting the best model
+## 2. Selecting the best model
 
 Our model selection strategy relies on a performance indicator (through the $\texttt{modsel.criterion}$ argument) and a tolerance criterion (through the $\texttt{best.model}$ argument): the best model is  defined as the sparsest model allowing to reach the highest value of the model selection criterion, up to the specified tolerance.
 The $\texttt{modsel.criterion}$ can be defined as the area under the ROC curve ($\texttt{modsel.criterion="auc"}$) or the so-called "best" balanced-accuracy ($\texttt{modsel.criterion="balanced.accuracy.best"}$), which is defined as the mean sensibility and specificity obtained when the ROC curve is closest to the optimal model.
@@ -107,7 +107,7 @@ We then extract the model into a dedicated object using the **extract_best_model
 best.model.lasso = extract_best_model(cv.res.lasso, modsel.criterion = "balanced.accuracy.best", best.eps = 1)
 ```
 
-##3. Making predictions and measuring performance
+## 3. Making predictions and measuring performance
 
 Finally, we can use the selected model to make predictions on the test set and assess predictive performance, using the **predict_clustlasso()** and **compute_perf()** functions.
 
@@ -137,7 +137,7 @@ grid()
 We then run the same process using the cluster-lasso model.
 
 
-##1. Cross-validation process
+## 1. Cross-validation process
 
 We run a similar cross-validation process, using the **clusterlasso_cv()** function included in the package. In practice, we need to specify the values to consider for the screening threshold ($\texttt{screen.thresh}$ argument) and the clustering threshold ($\texttt{clust.thresh}$ argument).
 
@@ -156,7 +156,7 @@ par(mfcol = c(1,3))
 show_cv_overall(cv.res.cluster, modsel.criterion = "balanced.accuracy.best", best.eps = 1)
 ```
 
-##2. Selecting the best model
+## 2. Selecting the best model
 
 We adopt the same model selection strategy, and first show a summary of the best model using the **show_cv_best()** function of the package. Note that this figure contains an additional plot, representing the number of features associated to each selected cluster.
 
@@ -173,13 +173,13 @@ We emphasize that this function returns a vector containing the cross-validation
 print(perf.best.cluster)
 ```
 
-We then extract the model into a dedicated object using the **extract_best_model()** function. This object contains the same information as for a lasso model, and an additionnal field providing the clusters definition.
+We then extract the model into a dedicated object using the **extract_best_model()** function. This object contains the same information as for a lasso model, and an additional field providing the clusters definition.
 
 ```{r}
 best.model.cluster = extract_best_model(cv.res.cluster, modsel.criterion = "balanced.accuracy.best", best.eps = 1, method = "clusterlasso")
 ```
 
-##3. Making predictions and measuring performance
+## 3. Making predictions and measuring performance
 
 Finally, we can use the selected model to make predictions on the test set and assess predictive performance, using the **predict_clustlasso()** and **compute_perf()** functions.
 
@@ -219,8 +219,8 @@ Finally, the **heatmap_correlation_signatures()** function of the package allows
 heatmap_correlation_signatures(X, best.model.lasso, best.model.cluster, clust.min = 5, plot.title = "features correlation matrix")
 ```
 
-This figure represents as a heatmap the correlation matrix built from the features selected by the lasso and the cluster-lasso (identifed by the orange and blue bars shown above the heatmap, respectively).
-The corresponding (absolute) values of model coeffcients are represented by green bars. 
-The  major clusters (involving more than $\texttt{clust.min}$ features, set here to $5$) of the cluster-lasso signatures are identifed by a dedicated color ranging from red to grey. 
+This figure represents as a heatmap the correlation matrix built from the features selected by the lasso and the cluster-lasso (identified by the orange and blue bars shown above the heatmap, respectively).
+The corresponding (absolute) values of model coefficients are represented by green bars. 
+The  major clusters (involving more than $\texttt{clust.min}$ features, set here to $5$) of the cluster-lasso signatures are identified by a dedicated color ranging from red to grey. 
 
 
