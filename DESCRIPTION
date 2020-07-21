@@ -1,17 +1,14 @@
 Package: clustLasso
 Title: A package implementing cluster-lasso approach.
 Version: 1.0
-Authors@R: c(
-    person("Pierre", "Mahé", email = "pierre.mahe@biomerieux.com", role = c("cre","aut")),
-    person("Dancette", "Magali", email = "magali.dancette@biomerieux.com", role = c("aut")))
 Description: A package implementing cluster-lasso approach.
-Depends: R (>= 3.4.3)
-License: GNU GPL V2
-Encoding: UTF-8
-LazyData: true
-Depends:
+Depends: R (>= 3.4.3),
 	glmnet,
 	Matrix,
 	ROCR,
 	RColorBrewer,
 	NMF
+License: GNU GPL V2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0
