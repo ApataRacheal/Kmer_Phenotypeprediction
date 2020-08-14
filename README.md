@@ -1,6 +1,7 @@
 # clustlasso
 
 This repository hosts the **clustlasso** R package supporting the paper [Interpreting k-mer based signatures for antibiotic resistance prediction](https://academic.oup.com/gigascience) (Jaillard *et al.*, 2020).
+This packages is referenced in the bio.tools and SciCrunch databases as *clustlasso* and *RRID:SCR_018820*, respectively.
 
 ## Description
 
